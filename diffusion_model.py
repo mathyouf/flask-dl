@@ -265,7 +265,7 @@ def define_model(clip_input, folder_name, session, cutn=64, clip_guidance_scale=
         'rescale_timesteps': True,
         'timestep_respacing': "24,48,64",
         # Modify this value to add the number of steps to each stages, will be slower but better quality                                 # timesteps.
-        'image_size': 512,
+        'image_size': 1024,
         'learn_sigma': True,
         'noise_schedule': 'linear',
         'num_channels': 256,
@@ -318,7 +318,7 @@ def define_model(clip_input, folder_name, session, cutn=64, clip_guidance_scale=
         "RGB_min": -0.9,
         "RGB_max": 0.9,  # Play with it to get different styles
         "cutn": cutn,
-        "cutn_batches": 4,  # Turn this up for better result but slower speed
+        "cutn_batches": 2,  # Turn this up for better result but slower speed
         "cutn_whole_portion": 0.1,  # The rotation augmentation, captures whole structure
         "rotation_fill": [1, 1, 1],
         "cutn_bw_portion": 0.1,
