@@ -222,9 +222,11 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
     else:
         sample_fn = diffusion.p_sample_loop_progressive
 
-    # createS3Folder(folder_name)
-
     iterations = 0
+
+    os.mkdir(session)
+    os.mkdir(folder_name)
+
     for i in range(model_params['n_batches']):
 
         cur_t = diffusion.num_timesteps - model_params['skip_timesteps'] - 1
@@ -246,8 +248,9 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
             if j % 10 == 0 or cur_t == 0:
                 for k, image in enumerate(sample['pred_xstart']):
                     filename = f'progress_{iterations}.png'
-                    TF.to_pil_image(image.add(1).div(2).clamp(0, 1)).save(filename)
-                    image_path = f'{session}/{folder_name}/{filename}'
+                    folder_path = f'{session}/{folder_name}/{filename}'
+                    TF.to_pil_image(image.add(1).div(2).clamp(0, 1)).save(folder_path)
+                    image_path = folder_path
                     savetoS3Bucket(image_path)
                     iterations+=1
                     # display.display(display.Image(filename))
