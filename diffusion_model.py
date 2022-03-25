@@ -4,6 +4,7 @@ import io
 import random
 import sys
 import tqdm
+import os
 
 import lpips
 import requests
@@ -23,6 +24,7 @@ import boto3
 # output_bucket = 'imagination-machine'
 
 from filterWords import removeStopWords
+from dotenv import load_dotenv
 
 sys.path.append('./CLIP')
 sys.path.append('./guided-diffusion')
@@ -112,23 +114,21 @@ def range_loss(input):
 
 
 def savetoS3Bucket(image_path):
-    # filename = f"output/{folder_name}/{i:04}.png"
-    # file_content = imageio.imwrite(filename, np.array(image))
-    # s3.meta.client.upload_file(f'output/{folder_name}/{i:04}.png', output_bucket, filename)
-
+    session = boto3.Session(
+        aws_access_key_id=os.getenv("ACCESS_KEY_ID"),
+        aws_secret_access_key=os.getenv("SECRET_ACCESS_KEY"),
+    )
+    s3 = session.resource('s3')
     client = boto3.client('s3', region_name='us-east-2')
-    client.upload_file(image_path, 'imagination-machine', image_path.split('/')[-1])
+    client.upload_file(image_path.split('/')[-1], 'imagination-machine',
+                       image_path)
 
+    # client = boto3.client('s3', region_name='us-east-2')
+    # client.upload_file(image_path, bucket, image_path.split('/')[-1])
     return
 
 
-# def createS3Folder(folder_name):
-#     # TODO: Create new folder in S3 with this name
-#     # This new folder is what Unity will be searching for new images inside of
-#     return
-
-
-def do_run(model, model_params, model_list, model_config, clip_model, clip_size, device, diffusion, folder_name):
+def do_run(model, model_params, model_list, model_config, clip_model, clip_size, device, diffusion, folder_name, session):
     torch.cuda.empty_cache()
 
     normalize = transforms.Normalize(mean=[0.48145466, 0.4578275, 0.40821073],
@@ -252,14 +252,15 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
                     filename = f'progress_{i * batch_size + k:05}.png'
                     TF.to_pil_image(image.add(1).div(2).clamp(0, 1)).save(filename)
                     tqdm.write(f'Batch {i}, step {j}, output {k}:')
-                    image_path = f'output/{folder_name}/{filename}'
+                    image_path = f'{session}/{folder_name}/{filename}'
                     savetoS3Bucket(image_path)
                     # display.display(display.Image(filename))
             cur_t -= 1
 
 
-def define_model(clip_input, folder_name):
+def define_model(clip_input, folder_name, session):
     # Model settings
+    load_dotenv()
     model_config = model_and_diffusion_defaults()
     model_config.update({
         'attention_resolutions': '32,16,8',
@@ -338,4 +339,4 @@ def define_model(clip_input, folder_name):
 
     torch.cuda.empty_cache()
     gc.collect()
-    do_run(model, model_params, model_list, model_config, clip_model, clip_size, device, diffusion, folder_name)
+    do_run(model, model_params, model_list, model_config, clip_model, clip_size, device, diffusion, folder_name, session)

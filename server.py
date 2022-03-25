@@ -11,8 +11,9 @@ def VisualImaginationMachine():
     # Get text input
     clip_input = request.args.get("clip_input")
     folder_name = request.args.get("folder_name")
+    session = request.args.get("session")
     # Run the Network
-    define_model(clip_input, folder_name)
+    define_model(clip_input, folder_name, session)
     # Return after done running
     return
 
