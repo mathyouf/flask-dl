@@ -17,5 +17,7 @@ def removeStopWords(txt):
             tokens_without_sw = [word for word in text_tokens if not word in stopwords.words()]
             filtered_sentence = (" ").join(tokens_without_sw)
             textarray[i] = filtered_sentence
+            if len(filtered_sentence) > 77:
+                textarray.remove(filtered_sentence)
     fixedtext = (" ").join(textarray)
     return fixedtext
