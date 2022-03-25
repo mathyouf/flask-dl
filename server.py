@@ -13,8 +13,7 @@ app = Flask(__name__)
 @app.route('/getImage', methods=["POST"])
 def VisualImaginationMachine():
     # Get text input
-    print("endpoint hit")
-    print(request.args.get('clip_input'))
+    print(request.args)
     clip_input = request.args.get('clip_input')
     # Run the Network
     runNetwork(clip_input)
