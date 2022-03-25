@@ -17,10 +17,6 @@ from torchvision.transforms import functional as TF
 import numpy as np
 import imageio
 import boto3
-# boto_session = boto3.session.Session()
-# s3 = boto_session.resource('s3')
-# region = boto_session.region_name
-# output_bucket = 'imagination-machine'
 
 from filterWords import removeStopWords
 from dotenv import load_dotenv
@@ -118,12 +114,12 @@ def savetoS3Bucket(image_path):
         aws_secret_access_key=os.getenv("SECRET_ACCESS_KEY"),
     )
     s3 = session.resource('s3')
-    client = boto3.client('s3', region_name='us-east-2')
-    client.upload_file(image_path.split('/')[-1], 'imagination-machine',
-                       image_path)
+    s3.meta.client.upload_file(Filename=image_path.split('/')[-1], Bucket='imagination-machine', Key=image_path)
 
     # client = boto3.client('s3', region_name='us-east-2')
     # client.upload_file(image_path, bucket, image_path.split('/')[-1])
+
+
     return
 
 

@@ -13,10 +13,11 @@ def VisualImaginationMachine():
     clip_input = request.args.get("clip_input")
     folder_name = request.args.get("folder_name")
     session = request.args.get("session")
+    print("clip_input", clip_input, "folder_name", folder_name, "session", session)
     # Run the Network
     define_model(clip_input, folder_name, session)
     # Return after done running
-    return
+    return "All done."
 
 
 # main driver function
