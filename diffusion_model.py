@@ -3,7 +3,6 @@ import gc
 import io
 import random
 import sys
-import tqdm
 import os
 
 import lpips
@@ -251,7 +250,6 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
                 for k, image in enumerate(sample['pred_xstart']):
                     filename = f'progress_{i * batch_size + k:05}.png'
                     TF.to_pil_image(image.add(1).div(2).clamp(0, 1)).save(filename)
-                    tqdm.write(f'Batch {i}, step {j}, output {k}:')
                     image_path = f'{session}/{folder_name}/{filename}'
                     savetoS3Bucket(image_path)
                     # display.display(display.Image(filename))
