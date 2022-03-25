@@ -113,7 +113,7 @@ def do_run(model, model_params, model_list, model_config, clip_model, device, di
         torch.manual_seed(model_params['seed'])
     make_cutouts = {}
     for i in model_list:
-        make_cutouts[i] = MakeCutouts(model_params['clip_size[i]'], model_params['cutn'] // len(model_list),
+        make_cutouts[i] = MakeCutouts(model_params['clip_size'][i], model_params['cutn'] // len(model_list),
                                       model_params['cut_pow'], model_params['cutn_whole_portion'],
                                       model_params['cutn_bw_portion'])
 
