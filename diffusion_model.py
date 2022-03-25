@@ -317,7 +317,7 @@ def define_model(clip_input, folder_name, session):
         # Controls how far gradient can go - try play with it, dramatic effect when clip guidance scale is high enough
         "RGB_min": -0.9,
         "RGB_max": 0.9,  # Play with it to get different styles
-        "cutn": 32,
+        "cutn": 128,
         "cutn_batches": 4,  # Turn this up for better result but slower speed
         "cutn_whole_portion": 0.1,  # The rotation augmentation, captures whole structure
         "rotation_fill": [1, 1, 1],
