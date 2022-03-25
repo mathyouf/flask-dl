@@ -254,18 +254,18 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
             cur_t -= 1
 
 
-def define_model(clip_input, folder_name, session, cutn=64, clip_guidance_scale=50000, tv_scale=80000):
+def define_model(clip_input, folder_name, session, cutn=64, clip_guidance_scale=50000, tv_scale=80000, img_size=512, num_steps=1000):
     # Model settings
     load_dotenv()
     model_config = model_and_diffusion_defaults()
     model_config.update({
         'attention_resolutions': '32,16,8',
         'class_cond': False,
-        'diffusion_steps': 1000,
+        'diffusion_steps': num_steps,
         'rescale_timesteps': True,
         'timestep_respacing': "24,48,64",
         # Modify this value to add the number of steps to each stages, will be slower but better quality                                 # timesteps.
-        'image_size': 1024,
+        'image_size': img_size,
         'learn_sigma': True,
         'noise_schedule': 'linear',
         'num_channels': 256,
