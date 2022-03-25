@@ -76,7 +76,7 @@ class MakeCutouts(nn.Module):
                 cutouts.append(F.adaptive_avg_pool2d(cutout, self.cut_size))
         if cut_2 > 0:
             for i in range(cut_2):
-                cutout = TF.rotate(input, angle=random.uniform(-10.0, 10.0), expand=True, fill=rotation_fill)
+                cutout = TF.rotate(input, angle=random.uniform(-10.0, 10.0), expand=True, fill=self.rotation_fill)
                 if i < int(self.cutn_bw_portion * cut_2):
                     cutout = gray(cutout)
                 cutouts.append(F.adaptive_avg_pool2d(cutout, self.cut_size))
