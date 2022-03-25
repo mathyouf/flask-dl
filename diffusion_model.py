@@ -103,7 +103,18 @@ def range_loss(input):
     return (input - input.clamp(-1, 1)).pow(2).mean([1, 2, 3])
 
 
-def do_run(model, model_params, model_list, model_config, clip_model, clip_size, device, diffusion):
+def savetoS3Bucket(filename):
+    # Save filename to S3 bucket
+    return
+
+
+def createS3Folder(folder_name):
+    # TODO: Create new folder in S3 with this name
+    # This new folder is what Unity will be searching for new images inside of
+    return
+
+
+def do_run(model, model_params, model_list, model_config, clip_model, clip_size, device, diffusion, folder_name):
     torch.cuda.empty_cache()
 
     normalize = transforms.Normalize(mean=[0.48145466, 0.4578275, 0.40821073],
@@ -202,6 +213,8 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
     else:
         sample_fn = diffusion.p_sample_loop_progressive
 
+    createS3Folder(folder_name)
+
     for i in range(model_params['n_batches']):
 
         cur_t = diffusion.num_timesteps - model_params['skip_timesteps'] - 1
@@ -225,11 +238,12 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
                     filename = f'progress_{i * batch_size + k:05}.png'
                     TF.to_pil_image(image.add(1).div(2).clamp(0, 1)).save(filename)
                     tqdm.write(f'Batch {i}, step {j}, output {k}:')
+                    savetoS3Bucket(filename)
                     # display.display(display.Image(filename))
             cur_t -= 1
 
 
-def define_model(clip_input):
+def define_model(clip_input, folder_name):
     # Model settings
     model_config = model_and_diffusion_defaults()
     model_config.update({
@@ -309,4 +323,4 @@ def define_model(clip_input):
 
     torch.cuda.empty_cache()
     gc.collect()
-    do_run(model, model_params, model_list, model_config, clip_model, clip_size, device, diffusion)
+    do_run(model, model_params, model_list, model_config, clip_model, clip_size, device, diffusion, folder_name)

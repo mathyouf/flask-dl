@@ -10,12 +10,11 @@ app = Flask(__name__)
 def VisualImaginationMachine():
     # Get text input
     clip_input = request.args.get("clip_input")
+    folder_name = request.args.get("folder_name")
     # Run the Network
-    define_model(clip_input)
-    # This file is generated at the end of do_run.cond_nf
-    filename = "progress_00000.png"
-    # Return image
-    return send_file(filename, mimetype="image/png")
+    define_model(clip_input, folder_name)
+    # Return after done running
+    return
 
 
 # main driver function
