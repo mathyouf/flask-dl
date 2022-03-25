@@ -1,0 +1,21 @@
+#/bin/bash
+
+# Check GPU
+
+nvidia-smi
+
+
+# Install dependencies
+
+git clone https://github.com/openai/CLIP
+git clone https://github.com/crowsonkb/guided-diffusion
+pip install -e ./CLIP
+pip install -e ./guided-diffusion
+pip install lpips
+
+
+# Download the diffusion model
+
+curl -OL --http1.1 'http://batbot.tv/ai/models/guided-diffusion/512x512_diffusion_uncond_finetune_008100.pt'
+
+
