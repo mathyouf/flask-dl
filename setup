@@ -4,6 +4,10 @@
 
 nvidia-smi
 
+apt update && apt upgrade
+apt install git
+apt install curl
+
 
 # Install dependencies
 
