@@ -252,7 +252,7 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
             cur_t -= 1
 
 
-def define_model(clip_input, folder_name, session):
+def define_model(clip_input, folder_name, session, cutn=64, clip_guidance_scale=50000, tv_scale=80000):
     # Model settings
     load_dotenv()
     model_config = model_and_diffusion_defaults()
@@ -285,7 +285,7 @@ def define_model(clip_input, folder_name, session):
 
     # Load models
 
-    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print('Using device:', device)
 
     model, diffusion = create_model_and_diffusion(**model_config)
@@ -307,15 +307,15 @@ def define_model(clip_input, folder_name, session):
         "prompts": [clip_input],
         "image_prompts": [],
         "batch_size": 1,
-        "clip_guidance_scale": 50000,
+        "clip_guidance_scale": clip_guidance_scale,
         # Controls how much the image should look like the prompt. Use high value when clamping activated
-        "tv_scale": 50000,  # Controls the smoothness of the final output.
+        "tv_scale": tv_scale,  # Controls the smoothness of the final output.
         "range_scale": 25,  # Controls how far out of range RGB values are allowed to be.
         "clamp_max": 0.1,
         # Controls how far gradient can go - try play with it, dramatic effect when clip guidance scale is high enough
         "RGB_min": -0.9,
         "RGB_max": 0.9,  # Play with it to get different styles
-        "cutn": 32,
+        "cutn": cutn,
         "cutn_batches": 4,  # Turn this up for better result but slower speed
         "cutn_whole_portion": 0.1,  # The rotation augmentation, captures whole structure
         "rotation_fill": [1, 1, 1],
