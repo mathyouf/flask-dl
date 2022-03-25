@@ -9,6 +9,7 @@ app = Flask(__name__)
 @app.route('/getImage', methods=["POST"])
 def VisualImaginationMachine():
     # Get text input
+    print("endpoint hit:)")
     clip_input = request.args.get("clip_input")
     folder_name = request.args.get("folder_name")
     session = request.args.get("session")
