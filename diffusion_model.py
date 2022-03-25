@@ -53,6 +53,7 @@ class MakeCutouts(nn.Module):
         self.cut_pow = cut_pow
         self.cutn_whole_portion = cutn_whole_portion
         self.cutn_bw_portion = cutn_bw_portion
+        self.rotation_fill = rotation_fill
 
     def forward(self, input):
         sideY, sideX = input.shape[2:4]
