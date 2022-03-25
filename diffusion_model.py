@@ -261,11 +261,11 @@ def define_model(clip_input, folder_name, session, cutn=64, clip_guidance_scale=
     model_config.update({
         'attention_resolutions': '32,16,8',
         'class_cond': False,
-        'diffusion_steps': num_steps,
+        'diffusion_steps': int(num_steps),
         'rescale_timesteps': True,
         'timestep_respacing': "24,48,64",
         # Modify this value to add the number of steps to each stages, will be slower but better quality                                 # timesteps.
-        'image_size': img_size,
+        'image_size': int(img_size),
         'learn_sigma': True,
         'noise_schedule': 'linear',
         'num_channels': 256,
@@ -309,15 +309,15 @@ def define_model(clip_input, folder_name, session, cutn=64, clip_guidance_scale=
         "prompts": [clip_input],
         "image_prompts": [],
         "batch_size": 1,
-        "clip_guidance_scale": clip_guidance_scale,
+        "clip_guidance_scale": int(clip_guidance_scale),
         # Controls how much the image should look like the prompt. Use high value when clamping activated
-        "tv_scale": tv_scale,  # Controls the smoothness of the final output.
+        "tv_scale": int(tv_scale),  # Controls the smoothness of the final output.
         "range_scale": 25,  # Controls how far out of range RGB values are allowed to be.
         "clamp_max": 0.1,
         # Controls how far gradient can go - try play with it, dramatic effect when clip guidance scale is high enough
         "RGB_min": -0.9,
         "RGB_max": 0.9,  # Play with it to get different styles
-        "cutn": cutn,
+        "cutn": int(cutn),
         "cutn_batches": 2,  # Turn this up for better result but slower speed
         "cutn_whole_portion": 0.1,  # The rotation augmentation, captures whole structure
         "rotation_fill": [1, 1, 1],
