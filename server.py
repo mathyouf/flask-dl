@@ -18,11 +18,11 @@ def VisualImaginationMachine():
     params.folder_name = request.args.get("folder_name")
     params.session = request.args.get("session")
     try:
-        params.cutn = request.args.get("cutn")
-        params.clip_guidance_scale = request.args.get("clip_guidance_scale")
-        params.tv_scale = request.args.get("tv_scale")
-        params.img_size = request.args.get("img_size")
-        params.num_steps = request.args.get("num_steps")
+        params.cutn = request.args.get("cutn") if request.args.get("cutn") else 64
+        params.clip_guidance_scale = request.args.get("clip_guidance_scale") if request.args.get("clip_guidance_scale") else 50000
+        params.tv_scale = request.args.get("tv_scale") if request.args.get("tv_scale") else 80000
+        params.img_size = request.args.get("img_size") if request.args.get("img_size") else 512
+        params.num_steps = request.args.get("num_steps") if request.args.get("num_steps") else 1000
     except:
         print("no params given for cutn, clip_guidance_scale, tv_scale, num_steps, and/or img_size")
     

@@ -254,7 +254,7 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
             cur_t -= 1
 
 
-def define_model(clip_input, folder_name, session, cutn=64, clip_guidance_scale=50000, tv_scale=80000, img_size=512, num_steps=1000):
+def define_model(clip_input, folder_name, session, cutn, clip_guidance_scale, tv_scale, img_size, num_steps):
     # Model settings
     load_dotenv()
     model_config = model_and_diffusion_defaults()
