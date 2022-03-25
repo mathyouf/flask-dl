@@ -101,7 +101,7 @@ def range_loss(input):
     return (input - input.clamp(-1, 1)).pow(2).mean([1, 2, 3])
 
 
-def do_run(model, model_params, model_list, model_config, clip_model, device, diffusion):
+def do_run(model, model_params, model_list, model_config, clip_model, clip_size, device, diffusion):
     torch.cuda.empty_cache()
 
     normalize = transforms.Normalize(mean=[0.48145466, 0.4578275, 0.40821073],
@@ -113,7 +113,7 @@ def do_run(model, model_params, model_list, model_config, clip_model, device, di
         torch.manual_seed(model_params['seed'])
     make_cutouts = {}
     for i in model_list:
-        make_cutouts[i] = MakeCutouts(model_params['clip_size'][i], model_params['cutn'] // len(model_list),
+        make_cutouts[i] = MakeCutouts(clip_size[i], model_params['cutn'] // len(model_list),
                                       model_params['cut_pow'], model_params['cutn_whole_portion'],
                                       model_params['cutn_bw_portion'])
 
@@ -308,4 +308,4 @@ def define_model(clip_input):
 
     torch.cuda.empty_cache()
     gc.collect()
-    do_run(model, model_params, model_list, model_config, clip_model, device, diffusion)
+    do_run(model, model_params, model_list, model_config, clip_model, clip_size, device, diffusion)
