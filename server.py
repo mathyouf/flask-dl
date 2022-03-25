@@ -345,12 +345,10 @@ def setup():
     pass
 
 def runNetwork(clip_input):
-    filename = 'sample_images/horror.png'
     gc.collect()
     global prompts
     prompts = [clip_input]
     do_run()
-    return filename
 
 @app.route('/getImage', methods=["POST"])
 def VisualImaginationMachine():
@@ -359,6 +357,7 @@ def VisualImaginationMachine():
     clip_input = request.args.get('clip_input')
     # Run the Network
     runNetwork(clip_input)
+    # This file is generated at the end of do_run.cond_nf
     filename="progress_00000.png"
     # Return image
     return send_file(filename, mimetype="image/png")
