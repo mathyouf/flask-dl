@@ -3,27 +3,32 @@
 from flask import Flask, send_file, request
 from diffusion_model import define_model
 
-app = Flask(__name__)
+class Params:
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
 
+app = Flask(__name__)
+params = Params()
 
 @app.route('/getImage', methods=["POST"])
 def VisualImaginationMachine():
     # Get text input
     print("endpoint hit:)")
-    clip_input = request.args.get("clip_input")
-    folder_name = request.args.get("folder_name")
-    session = request.args.get("session")
+    params.clip_input = request.args.get("clip_input")
+    params.folder_name = request.args.get("folder_name")
+    params.session = request.args.get("session")
     try:
-        cutn = request.args.get("cutn")
-        clip_guidance_scale = request.args.get("clip_guidance_scale")
-        tv_scale = request.args.get("tv_scale")
-        num_steps = request.args.get("num_steps")
-        img_size = request.args.get("img_size")
+        params.cutn = request.args.get("cutn")
+        params.clip_guidance_scale = request.args.get("clip_guidance_scale")
+        params.tv_scale = request.args.get("tv_scale")
+        params.num_steps = request.args.get("num_steps")
+        params.img_size = request.args.get("img_size")
     except:
         print("no params given for cutn, clip_guidance_scale, tv_scale, num_steps, and/or img_size")
-    print("clip_input", clip_input, "folder_name", folder_name, "session", session)
+    
+    print("PARAMS:\n", params)
     # Run the Network
-    define_model(clip_input, folder_name, session, cutn, clip_guidance_scale, tv_scale, num_steps, img_size)
+    define_model(params.clip_input, params.folder_name, params.session, params.cutn, params.clip_guidance_scale, params.tv_scale, params.num_steps, params.img_size)
     # Return after done running
     return "All done."
 

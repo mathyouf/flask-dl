@@ -7,6 +7,6 @@ def format_curl(params):
     curl_request = f"curl -X POST localhost:5000/getImage\?clip_input\=\"{nospace_prompt}\"\&folder_name\=\"{params.folder_name}\"\&session\=\"{params.session}\""
     return curl_request
 
-params = Params(prompt="once upon a time there was a beautiful princess | princess with a crown of diamonds | Bryce3d; cinema4d toon and cell shader; VR perspective; finely intricate detail | 8k resolution; Unreal Engine VRay; ArtStation; CGSociety", folder_name="adventure", session="one")
+params = Params(prompt="bright lattices of logic unfolding across that colourless void | intricate recursion  portal of digital virtual matrix realm to the internet data traffic realm | Bryce3d; cinema4d toon and cell shader; VR perspective | 8k resolution; Unreal Engine VRay; ArtStation; CGSociety", folder_name="adventure", session="one")
 
 print(format_curl(params))
