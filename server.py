@@ -26,7 +26,7 @@ def VisualImaginationMachine():
     except:
         print("no params given for cutn, clip_guidance_scale, tv_scale, num_steps, and/or img_size")
     
-    print("PARAMS:\n", params)
+    print("PARAMS:\n", params.__dict__)
     # Run the Network
     define_model(clip_input=params.clip_input, folder_name=params.folder_name, session=params.session, cutn=params.cutn, clip_guidance_scale=params.clip_guidance_scale, tv_scale=params.tv_scale, img_size=params.img_size, num_steps=params.num_steps)
     # Return after done running
