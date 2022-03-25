@@ -14,6 +14,14 @@ from torch.nn import functional as F
 from torchvision import transforms
 from torchvision.transforms import functional as TF
 
+import numpy as np
+import imageio
+import boto3
+# boto_session = boto3.session.Session()
+# s3 = boto_session.resource('s3')
+# region = boto_session.region_name
+# output_bucket = 'imagination-machine'
+
 from filterWords import removeStopWords
 
 sys.path.append('./CLIP')
@@ -103,15 +111,21 @@ def range_loss(input):
     return (input - input.clamp(-1, 1)).pow(2).mean([1, 2, 3])
 
 
-def savetoS3Bucket(filename):
-    # Save filename to S3 bucket
+def savetoS3Bucket(image_path):
+    # filename = f"output/{folder_name}/{i:04}.png"
+    # file_content = imageio.imwrite(filename, np.array(image))
+    # s3.meta.client.upload_file(f'output/{folder_name}/{i:04}.png', output_bucket, filename)
+
+    client = boto3.client('s3', region_name='us-east-2')
+    client.upload_file(image_path, 'imagination-machine', image_path.split('/')[-1])
+
     return
 
 
-def createS3Folder(folder_name):
-    # TODO: Create new folder in S3 with this name
-    # This new folder is what Unity will be searching for new images inside of
-    return
+# def createS3Folder(folder_name):
+#     # TODO: Create new folder in S3 with this name
+#     # This new folder is what Unity will be searching for new images inside of
+#     return
 
 
 def do_run(model, model_params, model_list, model_config, clip_model, clip_size, device, diffusion, folder_name):
@@ -213,7 +227,7 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
     else:
         sample_fn = diffusion.p_sample_loop_progressive
 
-    createS3Folder(folder_name)
+    # createS3Folder(folder_name)
 
     for i in range(model_params['n_batches']):
 
@@ -238,7 +252,8 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
                     filename = f'progress_{i * batch_size + k:05}.png'
                     TF.to_pil_image(image.add(1).div(2).clamp(0, 1)).save(filename)
                     tqdm.write(f'Batch {i}, step {j}, output {k}:')
-                    savetoS3Bucket(filename)
+                    image_path = f'output/{folder_name}/{filename}'
+                    savetoS3Bucket(image_path)
                     # display.display(display.Image(filename))
             cur_t -= 1
 
