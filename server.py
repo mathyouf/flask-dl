@@ -1,7 +1,7 @@
 # Importing flask module in the project is mandatory
 # An object of Flask class is our WSGI application.
 from flask import Flask, send_file, request
-from model import define_model
+from diffusion_model import define_model
 
 def runNetwork(clip_input):
     send_file(clip_input)

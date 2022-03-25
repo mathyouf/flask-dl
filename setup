@@ -7,6 +7,7 @@ nvidia-smi
 
 # Install dependencies
 
+pip install requirements.txt
 git clone https://github.com/openai/CLIP
 git clone https://github.com/crowsonkb/guided-diffusion
 pip install -e ./CLIP
