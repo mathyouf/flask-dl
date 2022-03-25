@@ -46,7 +46,7 @@ def parse_prompt(prompt):
 
 
 class MakeCutouts(nn.Module):
-    def __init__(self, cut_size, cutn, cut_pow=1., cutn_whole_portion=0.0, cutn_bw_portion=0.2):
+    def __init__(self, cut_size, cutn, cut_pow=1., cutn_whole_portion=0.0, cutn_bw_portion=0.2, rotation_fill=[1,1,1]):
         super().__init__()
         self.cut_size = cut_size
         self.cutn = cutn
@@ -115,7 +115,7 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
     for i in model_list:
         make_cutouts[i] = MakeCutouts(clip_size[i], model_params['cutn'] // len(model_list),
                                       model_params['cut_pow'], model_params['cutn_whole_portion'],
-                                      model_params['cutn_bw_portion'])
+                                      model_params['cutn_bw_portion'], model_params['rotation_fill'])
 
     side_x = side_y = model_config['image_size']
 
