@@ -21,14 +21,14 @@ def VisualImaginationMachine():
         params.cutn = request.args.get("cutn")
         params.clip_guidance_scale = request.args.get("clip_guidance_scale")
         params.tv_scale = request.args.get("tv_scale")
-        params.num_steps = request.args.get("num_steps")
         params.img_size = request.args.get("img_size")
+        params.num_steps = request.args.get("num_steps")
     except:
         print("no params given for cutn, clip_guidance_scale, tv_scale, num_steps, and/or img_size")
     
     print("PARAMS:\n", params)
     # Run the Network
-    define_model(params.clip_input, params.folder_name, params.session, params.cutn, params.clip_guidance_scale, params.tv_scale, params.num_steps, params.img_size)
+    define_model(clip_input=params.clip_input, folder_name=params.folder_name, session=params.session, cutn=params.cutn, clip_guidance_scale=params.clip_guidance_scale, tv_scale=params.tv_scale, img_size=params.img_size, num_steps=params.num_steps)
     # Return after done running
     return "All done."
 
