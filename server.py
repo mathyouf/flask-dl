@@ -14,8 +14,9 @@ app = Flask(__name__)
 def VisualImaginationMachine():
     # Get text input
     print(request.args)
-    clip_input = request.args.get('clip_input')
+    clip_input = request.args.get("clip_input")
     # Run the Network
+    print(clip_input)
     runNetwork(clip_input)
     # This file is generated at the end of do_run.cond_nf
     filename = "progress_00000.png"
