@@ -250,7 +250,7 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
                     filename = f'progress_{iterations}.png'
                     folder_path = f'{session}/{folder_name}/{filename}'
                     print("Printing folder_path", folder_path)
-                    TF.to_pil_image(image.add(1).div(2).clamp(0, 1)).save()
+                    TF.to_pil_image(image.add(1).div(2).clamp(0, 1)).save(folder_path)
                     image_path = folder_path
                     savetoS3Bucket(image_path)
                     iterations+=1
