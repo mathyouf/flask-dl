@@ -20,7 +20,7 @@ def VisualImaginationMachine():
     params.folder_name = request.form.get("folder_name") if request.form.get("folder_name") != None else request.args.get("folder_name")
     params.session = request.form.get("session") if request.form.get("session") != None else request.args.get("session")
     try:
-        params.cutn = request.form.get("cutn") if request.args.get("cutn") else 64
+        params.cutn = request.form.get("cutn") if request.args.get("cutn") else 128
         params.clip_guidance_scale = request.form.get("clip_guidance_scale") if request.args.get("clip_guidance_scale") else 50000
         params.tv_scale = request.form.get("tv_scale") if request.args.get("tv_scale") else 80000
         params.img_size = request.form.get("img_size") if request.args.get("img_size") else 512
