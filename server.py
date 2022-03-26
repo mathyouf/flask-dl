@@ -16,9 +16,9 @@ params = Params()
 def VisualImaginationMachine():
     # Get text input
     print("endpoint hit:)")
-    params.clip_input = request.form.get("clip_input") if request.form.get("clip_input") else request.args.get("clip_input")
-    params.folder_name = request.form.get("folder_name") if request.form.get("folder_name") else request.args.get("folder_name")
-    params.session = request.form.get("session") if request.form.get("session") else request.args.get("session")
+    params.clip_input = request.form.get("clip_input") if request.form.get("clip_input") != None else request.args.get("clip_input")
+    params.folder_name = request.form.get("folder_name") if request.form.get("folder_name") != None else request.args.get("folder_name")
+    params.session = request.form.get("session") if request.form.get("session") != None else request.args.get("session")
     try:
         params.cutn = request.form.get("cutn") if request.args.get("cutn") else 64
         params.clip_guidance_scale = request.form.get("clip_guidance_scale") if request.args.get("clip_guidance_scale") else 50000
