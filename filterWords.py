@@ -21,6 +21,7 @@ def removeStopWords(txt):
                 filtered_sentence = filtered_sentence[0:60]
             textarray[i] = filtered_sentence
             print(len(textarray[i]))
+    print(textarray)
     fixedtext = (" ").join(textarray)
 
     return fixedtext
