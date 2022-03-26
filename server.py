@@ -1,6 +1,7 @@
 # Importing flask module in the project is mandatory
 # An object of Flask class is our WSGI application.
 from flask import Flask, send_file, request
+import subprocess
 from diffusion_model import define_model
 
 class Params:
@@ -14,15 +15,15 @@ params = Params()
 def VisualImaginationMachine():
     # Get text input
     print("endpoint hit:)")
-    params.clip_input = request.args.get("clip_input")
-    params.folder_name = request.args.get("folder_name")
-    params.session = request.args.get("session")
+    params.clip_input = request.form.get("clip_input")
+    params.folder_name = request.form.get("folder_name")
+    params.session = request.form.get("session")
     try:
-        params.cutn = request.args.get("cutn") if request.args.get("cutn") else 64
-        params.clip_guidance_scale = request.args.get("clip_guidance_scale") if request.args.get("clip_guidance_scale") else 50000
-        params.tv_scale = request.args.get("tv_scale") if request.args.get("tv_scale") else 80000
-        params.img_size = request.args.get("img_size") if request.args.get("img_size") else 512
-        params.num_steps = request.args.get("num_steps") if request.args.get("num_steps") else 1000
+        params.cutn = request.form.get("cutn") if request.args.get("cutn") else 64
+        params.clip_guidance_scale = request.form.get("clip_guidance_scale") if request.args.get("clip_guidance_scale") else 50000
+        params.tv_scale = request.form.get("tv_scale") if request.args.get("tv_scale") else 80000
+        params.img_size = request.form.get("img_size") if request.args.get("img_size") else 512
+        params.num_steps = request.form.get("num_steps") if request.args.get("num_steps") else 1000
     except:
         print("no params given for cutn, clip_guidance_scale, tv_scale, num_steps, and/or img_size")
     
