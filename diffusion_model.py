@@ -4,6 +4,7 @@ import io
 import random
 import sys
 import os
+from pathlib import Path
 
 import lpips
 import requests
@@ -224,8 +225,7 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
 
     iterations = 0
 
-    os.mkdir(f'{session}/')
-    os.mkdir(f'{session}/{folder_name}/')
+    Path(f'{session}/{folder_name}/').mkdir(parents=True, exist_ok=True)
 
     for i in range(model_params['n_batches']):
 

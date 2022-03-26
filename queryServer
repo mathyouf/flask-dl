@@ -4,6 +4,6 @@
 
 echo $1 $2 $3 $4 $5 $6
 
-curl -X POST http://a4c8-18-31-16-181.ngrok.io:5000/getImage\?clip_input\="$1"\&folder_name\="$2"\&session\="$3"&cutn=$4&clip_guidance_scale=$5&tv_scale=$6
+curl -X POST localhost:5000/getImage\?clip_input\="$1"\&folder_name\="$2"\&session\="$3"&cutn=$4&clip_guidance_scale=$5&tv_scale=$6
 
 #aws s3 cp s3://imagination-machine
