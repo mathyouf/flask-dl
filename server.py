@@ -21,10 +21,10 @@ def VisualImaginationMachine():
     params.session = request.form.get("session") if request.form.get("session") != None else request.args.get("session")
     try:
         params.cutn = request.form.get("cutn") if request.args.get("cutn") else 32
-        params.clip_guidance_scale = request.form.get("clip_guidance_scale") if request.args.get("clip_guidance_scale") else 20000
-        params.tv_scale = request.form.get("tv_scale") if request.args.get("tv_scale") else 20000
+        params.clip_guidance_scale = request.form.get("clip_guidance_scale") if request.args.get("clip_guidance_scale") else 50000
+        params.tv_scale = request.form.get("tv_scale") if request.args.get("tv_scale") else 50000
         params.img_size = request.form.get("img_size") if request.args.get("img_size") else 512
-        params.num_steps = request.form.get("num_steps") if request.args.get("num_steps") else 1000
+        params.num_steps = request.form.get("num_steps") if request.args.get("num_steps") else 500
     except:
         print("no params given for cutn, clip_guidance_scale, tv_scale, num_steps, and/or img_size")
     
