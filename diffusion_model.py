@@ -224,8 +224,8 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
 
     iterations = 0
 
-    os.mkdir(session)
-    os.mkdir(folder_name)
+    os.mkdir(f'{session}/')
+    os.mkdir(f'{session}/{folder_name}/')
 
     for i in range(model_params['n_batches']):
 
@@ -253,7 +253,6 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
                     image_path = folder_path
                     savetoS3Bucket(image_path)
                     iterations+=1
-                    # display.display(display.Image(filename))
             cur_t -= 1
 
 
