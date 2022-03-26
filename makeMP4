@@ -2,7 +2,7 @@
 
 echo $1 $2
 
-ffmpeg -framerate 1 -i $1/$2/progress_%d.png $1$2.mp4
+ffmpeg -framerate 12 -i $1/$2/progress_%d.png $1$2.mp4
 
 # Copy from server to bucket
 aws s3 cp $1$2.mp4 s3://imagination-machine/$1/$2/

@@ -7,6 +7,7 @@ from nltk.tokenize import word_tokenize
 nltk.download('punkt')
 
 
+
 def removeStopWords(txt):
     textarray = txt.split('|')
     for i, textprompt in enumerate(textarray):
@@ -16,8 +17,9 @@ def removeStopWords(txt):
             text_tokens = word_tokenize(txt)
             tokens_without_sw = [word for word in text_tokens if not word in stopwords.words()]
             filtered_sentence = (" ").join(tokens_without_sw)
-            textarray[i] = filtered_sentence
             if len(filtered_sentence) > 77:
-                textarray.remove(filtered_sentence)
+                filtered_sentence = filtered_sentence[0:77]
+            textarray[i] = filtered_sentence
     fixedtext = (" ").join(textarray)
+
     return fixedtext
