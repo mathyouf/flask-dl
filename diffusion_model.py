@@ -249,7 +249,8 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
                 for k, image in enumerate(sample['pred_xstart']):
                     filename = f'progress_{iterations}.png'
                     folder_path = f'{session}/{folder_name}/{filename}'
-                    TF.to_pil_image(image.add(1).div(2).clamp(0, 1)).save(filename)
+                    print("Printing folder_path", folder_path)
+                    TF.to_pil_image(image.add(1).div(2).clamp(0, 1)).save(folder_path)
                     image_path = folder_path
                     savetoS3Bucket(image_path)
                     iterations+=1
