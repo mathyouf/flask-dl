@@ -223,7 +223,7 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
     else:
         sample_fn = diffusion.p_sample_loop_progressive
 
-    iterations = 0
+    iterations = 97
 
     Path(f'{session}/{folder_name}/').mkdir(parents=True, exist_ok=True)
 
@@ -247,7 +247,7 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
         for j, sample in enumerate(samples):
             if j % 10 == 0 or cur_t == 0:
                 for k, image in enumerate(sample['pred_xstart']):
-                    filename = f'progress_{iterations}.png'
+                    filename = f'progress_{chr(iterations)}.png'
                     folder_path = f'{session}/{folder_name}/{filename}'
                     print("Printing folder_path", folder_path)
                     TF.to_pil_image(image.add(1).div(2).clamp(0, 1)).save(folder_path)
