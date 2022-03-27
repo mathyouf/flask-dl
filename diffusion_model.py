@@ -245,7 +245,7 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
         )
         batch_size = model_params['batch_size']
         for j, sample in enumerate(samples):
-            if j % 5 == 0 or cur_t == 0:
+            if j % 2 == 0 or cur_t == 0:
                 for k, image in enumerate(sample['pred_xstart']):
                     filename = f'progress_{iterations}.png'
                     folder_path = f'{session}/{folder_name}/{filename}'
