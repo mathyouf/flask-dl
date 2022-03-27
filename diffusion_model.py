@@ -311,7 +311,7 @@ def define_model(clip_input, folder_name, session, cutn, clip_guidance_scale, tv
     model_params = {
         "prompts": [clip_input],
         "image_prompts": [],
-        "batch_size": 4,
+        "batch_size": 1,
         "clip_guidance_scale": int(clip_guidance_scale),
         # Controls how much the image should look like the prompt. Use high value when clamping activated
         "tv_scale": int(tv_scale),  # Controls the smoothness of the final output.
