@@ -4,8 +4,8 @@ import io
 import random
 import sys
 import os
+from operator import itemgetter
 from pathlib import Path
-
 import lpips
 import requests
 import torch
@@ -14,22 +14,15 @@ from torch import nn
 from torch.nn import functional as F
 from torchvision import transforms
 from torchvision.transforms import functional as TF
-
-import numpy as np
-import imageio
 import boto3
-
 from filterWords import removeStopWords
 from dotenv import load_dotenv
+import clip
+from guided_diffusion.script_util import create_model_and_diffusion, model_and_diffusion_defaults
 
 sys.path.append('./CLIP')
 sys.path.append('./guided-diffusion')
 
-import clip
-from guided_diffusion.script_util import create_model_and_diffusion, model_and_diffusion_defaults
-
-
-# Define necessary functions
 
 def fetch(url_or_path):
     if str(url_or_path).startswith('http://') or str(url_or_path).startswith('https://'):
@@ -149,7 +142,6 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
     for prompt in model_params['prompts']:
         txt, weight = parse_prompt(prompt)
         txt = removeStopWords(txt)
-        print(txt)
         for i in model_list:
             target_embeds[i].append(clip_model[i].encode_text(clip.tokenize(txt).to(device)).float())
         weights.append(weight)
@@ -172,7 +164,7 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
 
     init = None
     if model_params['init_image'] is not None:
-        init = Image.open(fetch(model_params['init_image'])).convert('RGB')
+        init = model_params['init_image']
         init = init.resize((side_x, side_y), Image.LANCZOS)
         init = TF.to_tensor(init).to(device).unsqueeze(0).mul(2).sub(1)
 
@@ -250,25 +242,26 @@ def do_run(model, model_params, model_list, model_config, clip_model, clip_size,
                     filename = f'progress_{iterations}.png'
                     folder_path = f'{session}/{folder_name}/{filename}'
                     print("Printing folder_path", folder_path)
-                    TF.to_pil_image(image.add(1).div(2).clamp(0, 1)).save(folder_path)
+                    img = TF.to_pil_image(image.add(1).div(2).clamp(0, 1))
+                    img.save(folder_path)
                     image_path = folder_path
-                    savetoS3Bucket(image_path)
                     iterations+=1
             cur_t -= 1
+        return img
 
 
-def define_model(clip_input, folder_name, session, cutn, clip_guidance_scale, tv_scale, img_size, num_steps):
+def define_model(params):
     # Model settings
     load_dotenv()
     model_config = model_and_diffusion_defaults()
     model_config.update({
         'attention_resolutions': '32,16,8',
         'class_cond': False,
-        'diffusion_steps': int(num_steps),
+        'diffusion_steps': int(params.num_steps),
         'rescale_timesteps': True,
         'timestep_respacing': "24,48,64",
-        # Modify this value to add the number of steps to each stages, will be slower but better quality                                 # timesteps.
-        'image_size': int(img_size),
+        # Modify this value to add the number of steps to each stages, will be slower but better quality
+        'image_size': int(params.img_size),
         'learn_sigma': True,
         'noise_schedule': 'linear',
         'num_channels': 256,
@@ -289,7 +282,6 @@ def define_model(clip_input, folder_name, session, cutn, clip_guidance_scale, tv
     torch.cuda.empty_cache()
 
     # Load models
-
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print('Using device:', device)
 
@@ -309,18 +301,18 @@ def define_model(clip_input, folder_name, session, cutn, clip_guidance_scale, tv
         clip_size[i] = clip_model[i].visual.input_resolution
 
     model_params = {
-        "prompts": [clip_input],
+        "prompts": [params.clip_input],
         "image_prompts": [],
         "batch_size": 1,
-        "clip_guidance_scale": int(clip_guidance_scale),
+        "clip_guidance_scale": int(params.clip_guidance_scale),
         # Controls how much the image should look like the prompt. Use high value when clamping activated
-        "tv_scale": int(tv_scale),  # Controls the smoothness of the final output.
+        "tv_scale": int(params.tv_scale),  # Controls the smoothness of the final output.
         "range_scale": 25,  # Controls how far out of range RGB values are allowed to be.
         "clamp_max": 0.1,
         # Controls how far gradient can go - try play with it, dramatic effect when clip guidance scale is high enough
         "RGB_min": -0.9,
         "RGB_max": 0.9,  # Play with it to get different styles
-        "cutn": int(cutn),
+        "cutn": int(params.cutn),
         "cutn_batches": 2,  # Turn this up for better result but slower speed
         "cutn_whole_portion": 0.1,  # The rotation augmentation, captures whole structure
         "rotation_fill": [1, 1, 1],
@@ -328,7 +320,7 @@ def define_model(clip_input, folder_name, session, cutn, clip_guidance_scale, tv
         # Greyscale augmentation, focus on structure rather than color info to give better structure
         "cut_pow": 1,
         "n_batches": 1,
-        "init_image": None,  # This can be an URL or Colab local path and must be in quotes.
+        "init_image": params.init_image,  # This can be an URL or Colab local path and must be in quotes.
         "skip_timesteps": 0,
         # Skip unstable steps                  # Higher values make the output look more like the init.
         "init_scale": 0,  # This enhances the effect of the init image, a good value is 1000.
@@ -338,4 +330,5 @@ def define_model(clip_input, folder_name, session, cutn, clip_guidance_scale, tv
 
     torch.cuda.empty_cache()
     gc.collect()
-    do_run(model, model_params, model_list, model_config, clip_model, clip_size, device, diffusion, folder_name, session)
+    final_img = do_run(model, model_params, model_list, model_config, clip_model, clip_size, device, diffusion, params.folder_name, params.session)
+    return final_img
