@@ -28,12 +28,8 @@ def VisualImaginationMachine():
     params.num_steps = rf.get("num_steps", 500)
 
     # Run the Network
-    define_model(clip_input=params.clip_input, folder_name=params.folder_name, session=params.session, cutn=params.cutn, clip_guidance_scale=params.clip_guidance_scale, tv_scale=params.tv_scale, img_size=params.img_size, num_steps=params.num_steps)
-    # Make into video
-    makeMp4command=['bash', './makeMP4', params.session, params.folder_name]
-    subprocess.call(makeMp4command)
-    # Return after done running
-    return "All done."
+    img = define_model(params)
+    return send_file(img, mimetype='image')
 
 
 # main driver function
